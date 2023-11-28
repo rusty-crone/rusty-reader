@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 use std::fs;
 
@@ -16,9 +17,18 @@ fn main() {
         .replace("!", "")
         .replace("?", "")
         .replace("\"", "");
-    let parts = contents.split_whitespace();
+    let words = contents.split_whitespace();
 
-    for word in parts {
-        println!("{word}");
+    let mut word_counts:HashMap<String, i32> = HashMap::new();
+
+    for word in words {
+        match word_counts.get(word) {
+            Some(count) => word_counts.insert(word.to_string(), count + 1),
+            None => word_counts.insert(word.to_string(), 1)
+        };
+    }
+
+    for (word, count) in & word_counts {
+        println!("{}={}", word, count);
     }
 }
