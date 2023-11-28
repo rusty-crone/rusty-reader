@@ -16,6 +16,7 @@ fn main() {
         .replace(",", "")
         .replace("!", "")
         .replace("?", "")
+        .replace("-", "")
         .replace("\"", "");
     let words = contents.split_whitespace();
 
