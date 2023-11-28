@@ -28,7 +28,10 @@ fn main() {
         };
     }
 
-    for (word, count) in & word_counts {
+    let mut vec = Vec::from_iter(word_counts);
+    vec.sort_by(|a, b| b.1.cmp(&a.1));
+
+    for (word, count) in & vec {
         println!("{}={}", word, count);
     }
 }
