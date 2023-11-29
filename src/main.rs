@@ -36,6 +36,7 @@ fn main() {
     let mut vec = Vec::from_iter(word_counts);
     vec.sort_by(|a, b| b.1.cmp(&a.1));
     let mut adverbs: Vec<(&String, &i32)> = Vec::new();
+    let mut ings: Vec<(&String, &i32)> = Vec::new();
 
     println!("Repeated Words");
     println!("--------------");
@@ -44,8 +45,9 @@ fn main() {
         if count > &1 {
             if word.ends_with("ly") && !not_adverbs.contains(word) {
                 adverbs.push((word, count));
-            }
-            else {
+            } else if word.ends_with("ing") {
+                ings.push((word, count));
+            } else {
                 println!("{}={}", word, count);
             }
         }
@@ -58,6 +60,14 @@ fn main() {
     adverbs.sort_by(|a, b| b.1.cmp(&a.1));
     for (adverb, count) in adverbs {
         println!("{}={}", adverb, count);
+    }
+
+    println!();
+    println!("-ings ({})", ings.len());
+    println!("----------");
+    ings.sort_by(|a, b| b.1.cmp(&a.1));
+    for (ing, count) in ings {
+        println!("{}={}", ing, count);
     }
 
     let passive_words = get_passive();
