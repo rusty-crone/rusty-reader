@@ -37,10 +37,16 @@ fn main() {
     let mut vec = Vec::from_iter(word_counts);
     vec.sort_by(|a, b| b.1.cmp(&a.1));
 
+    println!("Repeated Words");
+    println!("--------------");
     for (word, count) in & vec {
-    //    println!("{}={}", word, count);
+        if count > &1 {
+            println!("{}={}", word, count);
+        }
+    //
     }
 
+    println!();
     println!("Passive Words/Phrases");
     println!("---------------------");
     let passive_words = get_passive();
