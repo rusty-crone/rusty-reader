@@ -3,7 +3,6 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::{self, BufRead};
-use std::mem::size_of_val;
 use std::path::Path;
 
 fn main() {
@@ -36,25 +35,46 @@ fn main() {
 
     let mut vec = Vec::from_iter(word_counts);
     vec.sort_by(|a, b| b.1.cmp(&a.1));
+    let mut adverbs: Vec<(&String, &i32)> = Vec::new();
 
     println!("Repeated Words");
     println!("--------------");
+    let not_adverbs = get_not_adverbs();
     for (word, count) in & vec {
         if count > &1 {
-            println!("{}={}", word, count);
+            if word.ends_with("ly") && !not_adverbs.contains(word) {
+                adverbs.push((word, count));
+            }
+            else {
+                println!("{}={}", word, count);
+            }
         }
     //
     }
 
     println!();
-    println!("Passive Words/Phrases");
-    println!("---------------------");
+    println!("Adverbs ({})", adverbs.len());
+    println!("------------");
+    adverbs.sort_by(|a, b| b.1.cmp(&a.1));
+    for (adverb, count) in adverbs {
+        println!("{}={}", adverb, count);
+    }
+
     let passive_words = get_passive();
+    let mut passive_word_counts: Vec<(&String, usize)> = Vec::new();
     for word in & passive_words {
         let count = count_occurrences(word, &contents);
         if count > 0 {
-            println!("{}={}", word, count);
+            passive_word_counts.push((word, count));
         }
+    }
+    passive_word_counts.sort_by(|a, b| b.1.cmp(&a.1));
+
+    println!();
+    println!("Passive Words/Phrases");
+    println!("---------------------");
+    for tuple in passive_word_counts {
+        println!("{}={}", tuple.0, tuple.1);
     }
     //println!("{:?}", passive_words);
 }
@@ -70,6 +90,19 @@ fn get_passive() -> Vec<String> {
         }
     }
     passive_words
+}
+
+fn get_not_adverbs() -> Vec<String> {
+    let mut not_adverbs: Vec<String> = Vec::new();
+    if let Ok(lines) = read_lines("not_adverbs.txt") {
+        // Consumes the iterator, returns an (Optional) String
+        for line in lines {
+            if let Ok(word) = line {
+                not_adverbs.push(word)
+            }
+        }
+    }
+    not_adverbs
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
