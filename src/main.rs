@@ -40,6 +40,9 @@ fn main() {
     for (word, count) in & vec {
     //    println!("{}={}", word, count);
     }
+
+    println!("Passive Words/Phrases");
+    println!("---------------------");
     let passive_words = get_passive();
     for word in & passive_words {
         let count = count_occurrences(word, &contents);
