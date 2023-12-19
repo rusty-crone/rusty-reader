@@ -38,18 +38,21 @@ fn main() {
     let mut adverbs: Vec<(&String, &i32)> = Vec::new();
     let mut ings: Vec<(&String, &i32)> = Vec::new();
 
+    let passive_words = get_passive();
+    let mut passive_word_counts: Vec<(&String, usize)> = Vec::new();
+
     println!("Repeated Words");
     println!("--------------");
     let not_adverbs = get_not_adverbs();
     for (word, count) in & vec {
         if count > &1 {
-            if word.ends_with("ly") && !not_adverbs.contains(word) {
-                adverbs.push((word, count));
-            } else if word.ends_with("ing") {
-                ings.push((word, count));
-            } else {
+            // if word.ends_with("ly") { //} && !not_adverbs.contains(word) {
+            //     adverbs.push((word, count));
+            // } else if word.ends_with("ing") {
+            //     ings.push((word, count));
+            // } else {
                 println!("{}={}", word, count);
-            }
+            // }
         }
     //
     }
@@ -70,8 +73,6 @@ fn main() {
         println!("{}={}", ing, count);
     }
 
-    let passive_words = get_passive();
-    let mut passive_word_counts: Vec<(&String, usize)> = Vec::new();
     for word in & passive_words {
         let count = count_occurrences(word, &contents);
         if count > 0 {
